@@ -4,14 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/MovementComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+#include "GameFramework/Pawn.h"
 #include "CustomMovementComponent.generated.h"
 
 /**
  * 
  */
 UCLASS(BlueprintType, Blueprintable, meta = (BlueprintSpawnableComponent))
-class CPPEXAMCLAUDIODALLAI_API UCustomMovementComponent : public UCharacterMovementComponent
+class CPPEXAMCLAUDIODALLAI_API UCustomMovementComponent : public UPawnMovementComponent
 {
 	GENERATED_BODY()
 	
@@ -26,5 +27,6 @@ public:
 	void MoveForward(float Input);
 	UFUNCTION(BlueprintCallable)
 	void MoveRight(float Input);
+	UFUNCTION(BlueprintCallable)
 	void CustomJump();
 };

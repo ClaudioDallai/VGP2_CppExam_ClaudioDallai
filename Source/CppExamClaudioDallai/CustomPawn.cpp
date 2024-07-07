@@ -29,7 +29,7 @@ void ACustomPawn::Tick(float DeltaTime)
 void ACustomPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	//PlayerInputComponent->BindAxis(FName("Forward/Backward"), this, &ACustomPawn::ForwardBackwardCallback);
+	PlayerInputComponent->BindAxis(FName("Forward"), this, &ACustomPawn::ForwardBackwardCallback);
 	PlayerInputComponent->BindAxis(FName("Right"), this, &ACustomPawn::RightLeftCallback);
 	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACustomPawn::Jump);
 

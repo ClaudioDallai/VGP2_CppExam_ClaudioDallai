@@ -59,8 +59,10 @@ void UCustomMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UCustomMovementComponent::MoveForward(float Input)
 {
-	FVector MoveDirection = UpdatedComponent->GetForwardVector() * Input * 500;
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), Input)
 
+	FVector MoveDirection = UpdatedComponent->GetForwardVector() * Input * 500;
+	
 	MoveDirection.Z = Velocity.Z;
 	if (this->bCannotMoveForward && MoveDirection.X > 0)
 	{
@@ -75,7 +77,7 @@ void UCustomMovementComponent::MoveForward(float Input)
 
 void UCustomMovementComponent::MoveRight(float Input)
 {
-	FVector MoveDirection = GetOwner()->GetActorRightVector() * Input * 500;
+	FVector MoveDirection = UpdatedComponent->GetRightVector() * Input * 500;
 
 	MoveDirection.Z = Velocity.Z;
 	if (this->bCannotMoveForward && MoveDirection.X > 0)
@@ -91,5 +93,9 @@ void UCustomMovementComponent::MoveRight(float Input)
 
 void UCustomMovementComponent::CustomJump()
 {
-	
+	APawn* Owner = Cast<APawn>(GetOwner());
+	if (Owner)
+	{
+		Owner->AddMovementInput(FVector::UpVector, 10000.0f, true);
+	}
 }
