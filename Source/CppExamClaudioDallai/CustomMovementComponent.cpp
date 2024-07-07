@@ -30,8 +30,7 @@ void UCustomMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	{
 		FVector CompenetrationCorrection = GetPenetrationAdjustment(Hit);
 		ResolvePenetration(CompenetrationCorrection, Hit, UpdatedComponent->GetComponentQuat());
-		//Velocity.X = 0;		//only for gravity
-		//Velocity.Y = 0;
+		
 		if (Hit.Normal.Z > 0)
 		{
 			Velocity.Z = 0;
@@ -76,7 +75,7 @@ void UCustomMovementComponent::MoveForward(float Input)
 
 void UCustomMovementComponent::MoveRight(float Input)
 {
-	FVector MoveDirection = UpdatedComponent->GetRightVector() * Input * 500;
+	FVector MoveDirection = GetOwner()->GetActorRightVector() * Input * 500;
 
 	MoveDirection.Z = Velocity.Z;
 	if (this->bCannotMoveForward && MoveDirection.X > 0)
@@ -90,6 +89,7 @@ void UCustomMovementComponent::MoveRight(float Input)
 	this->Velocity += MoveDirection;
 }
 
-
-
-
+void UCustomMovementComponent::CustomJump()
+{
+	
+}

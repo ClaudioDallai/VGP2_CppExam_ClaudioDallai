@@ -15,7 +15,7 @@ ACustomPawn::ACustomPawn()
 void ACustomPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	this->PlayerControllerInstance = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 }
 
 // Called every frame
@@ -29,11 +29,16 @@ void ACustomPawn::Tick(float DeltaTime)
 void ACustomPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//PlayerInputComponent->BindAxis(FName("Forward/Backward"), this, &ACustomPawn::ForwardBackwardCallback);
+	PlayerInputComponent->BindAxis(FName("Right"), this, &ACustomPawn::RightLeftCallback);
+	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACustomPawn::Jump);
 
 }
 
 void ACustomPawn::InitializePlayerPawn()
 {
+	this->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
 	// Setup Capsule
 	this -> CapsuleComponentInstance = CreateAbstractDefaultSubobject<UCapsuleComponent>(TEXT("PlayerCapsule"));
 	if (CapsuleComponentInstance)
@@ -76,3 +81,30 @@ void ACustomPawn::InitializePlayerPawn()
 	}
 }
 
+
+#pragma region Inputs
+void ACustomPawn::Look(FVector2D InputAxis)
+{
+	if (Controller != nullptr)
+	{
+		AddControllerYawInput(InputAxis.X);
+		AddControllerPitchInput(InputAxis.Y);
+	}
+}
+
+void ACustomPawn::ForwardBackwardCallback(float Input)
+{
+	this->MovementComponentInstance->MoveForward(Input);
+}
+
+void ACustomPawn::RightLeftCallback(float Input)
+{
+	this->MovementComponentInstance->MoveRight(Input);
+}
+
+void ACustomPawn::Jump()
+{
+	this->MovementComponentInstance->CustomJump();
+}
+
+#pragma endregion

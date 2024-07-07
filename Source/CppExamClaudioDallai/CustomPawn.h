@@ -9,6 +9,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/Controller.h"
+#include <Kismet/GameplayStatics.h>
 #include "CustomPawn.generated.h"
 
 UCLASS()
@@ -39,6 +41,9 @@ public:
 	UCameraComponent* CameraComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* SpringArmComponentInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	APlayerController* PlayerControllerInstance;
+	
 
 
 public:	
@@ -48,7 +53,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void Look(FVector2D InputAxis);
+	void ForwardBackwardCallback(float Input);
+	void RightLeftCallback(float Input);
+	void Jump();
+
 private:
 	void InitializePlayerPawn();
-
 };
