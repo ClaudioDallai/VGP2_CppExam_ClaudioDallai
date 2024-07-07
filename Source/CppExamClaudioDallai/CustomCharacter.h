@@ -5,22 +5,22 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "CustomMovementComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include <InputAction.h>
 #include <Kismet/GameplayStatics.h>
-#include "CustomPawn.generated.h"
+#include "CustomCharacter.generated.h"
 
 UCLASS()
-class CPPEXAMCLAUDIODALLAI_API ACustomPawn : public ACharacter
+class CPPEXAMCLAUDIODALLAI_API ACustomCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	ACustomPawn();
+	ACustomCharacter();
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,25 +28,34 @@ protected:
 
 private:
 	const FString SkeletalMeshPath = "/Game/Characters/Mannequins/Meshes/SKM_Quinn_Simple.SKM_Quinn_Simple";
-	const FString AnimInstancePath = "/Game/Custom/ABP_CustomManny.ABP_CustomManny";
+	const FString AnimInstancePath = "/Game/Characters/Mannequins/Animations/ABP_Quinn";
+	const FName PlayerTag = "Player";
 
 public:
 
 	#pragma region VarNotUsed
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	/*
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* SkeletalMeshComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCustomMovementComponent* MovementComponentInstance;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UCameraComponent* CameraComponentInstance;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	USpringArmComponent* SpringArmComponentInstance;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)*/
+	
+	*/
 	#pragma endregion
 	
+	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerControllerInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCameraComponent* CameraComponentInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USpringArmComponent* SpringArmComponentInstance;
+
+	UPROPERTY(BlueprintReadOnly)
+	UCharacterMovementComponent* CharacterMovementComponentInstance;
 
 public:	
 	// Called every frame
@@ -55,7 +64,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void Look(FVector2D InputAxis);
+	void LookXCallback(float MouseInput);
+	void LookYCallback(float MouseInput);
 	void ForwardBackwardCallback(float Input);
 	void RightLeftCallback(float Input);
 	void Jump();

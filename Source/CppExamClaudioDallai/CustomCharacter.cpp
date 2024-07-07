@@ -1,42 +1,43 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CustomPawn.h"
+#include "CustomCharacter.h"
 
 // Sets default values
-ACustomPawn::ACustomPawn()
+ACustomCharacter::ACustomCharacter()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	InitializePlayerCharacter();
 }
 
 // Called when the game starts or when spawned
-void ACustomPawn::BeginPlay()
+void ACustomCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	this->Tags.Add(PlayerTag);
 	this->PlayerControllerInstance = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 }
 
 // Called every frame
-void ACustomPawn::Tick(float DeltaTime)
+void ACustomCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void ACustomPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis(FName("Forward"), this, &ACustomPawn::ForwardBackwardCallback);
-	PlayerInputComponent->BindAxis(FName("Right"), this, &ACustomPawn::RightLeftCallback);
-	//PlayerInputComponent->BindAxis(FName("Look"), this, &ACustomPawn::Look)
-	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACustomPawn::Jump);
-
+	PlayerInputComponent->BindAxis(FName("Forward"), this, &ACustomCharacter::ForwardBackwardCallback);
+	PlayerInputComponent->BindAxis(FName("Right"), this, &ACustomCharacter::RightLeftCallback);
+	PlayerInputComponent->BindAxis(FName("LookY"), this, &ACustomCharacter::LookYCallback);
+	PlayerInputComponent->BindAxis(FName("LookX"), this, &ACustomCharacter::LookXCallback);
+	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACustomCharacter::Jump);
 }
 
-void ACustomPawn::InitializePlayerCharacter()
+void ACustomCharacter::InitializePlayerCharacter()
 {
 	// Add Skeletal Mesh
 	USkeletalMeshComponent* SkeletalMesh = GetMesh();
@@ -46,36 +47,68 @@ void ACustomPawn::InitializePlayerCharacter()
 	// Add Animation Class
 	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimObj(*AnimInstancePath);
 	SkeletalMesh->SetAnimInstanceClass(AnimObj.Object->GeneratedClass);
+	
+	// SpringArm
+	SpringArmComponentInstance = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	SpringArmComponentInstance->SetupAttachment(RootComponent);
+	SpringArmComponentInstance->TargetArmLength = 300.0f; 
+	SpringArmComponentInstance->bUsePawnControlRotation = true;
+	
+	// Camera
+	CameraComponentInstance = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
+	CameraComponentInstance->SetupAttachment(SpringArmComponentInstance, USpringArmComponent::SocketName);
+	CameraComponentInstance->bUsePawnControlRotation = false;
+	CameraComponentInstance->SetRelativeLocation(FVector(0.0f, 0.0f, 90.0f));
+
+	// Setup
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	CharacterMovementComponentInstance = GetCharacterMovement();
+	CharacterMovementComponentInstance->bOrientRotationToMovement = true;
+
+	CharacterMovementComponentInstance->RotationRate = FRotator(0.0f, 550.0f, 0.0f);
+	CharacterMovementComponentInstance->JumpZVelocity = 700.0f;
+	CharacterMovementComponentInstance->AirControl = 0.45f;
+	CharacterMovementComponentInstance->MaxWalkSpeed = 450.0f;
 }
 
 
 #pragma region Inputs
-void ACustomPawn::Look(FVector2D InputAxis)
+void ACustomCharacter::LookXCallback(float MouseInput)
 {
 	if (PlayerControllerInstance != nullptr)
 	{
-		AddControllerYawInput(InputAxis.X);
-		AddControllerPitchInput(InputAxis.Y);
+		AddControllerYawInput(MouseInput);
 	}
 }
-
-void ACustomPawn::ForwardBackwardCallback(float Input)
+void ACustomCharacter::LookYCallback(float MouseInput)
 {
 	if (PlayerControllerInstance != nullptr)
 	{
-		AddMovementInput(GetActorForwardVector(), Input);
+		UE_LOG(LogTemp, Warning, TEXT("%f"), MouseInput);
+		AddControllerPitchInput(MouseInput);
 	}
 }
 
-void ACustomPawn::RightLeftCallback(float Input)
+void ACustomCharacter::ForwardBackwardCallback(float Input)
 {
 	if (PlayerControllerInstance != nullptr)
 	{
-		AddMovementInput(GetActorRightVector(), Input);
+		AddMovementInput(CameraComponentInstance->GetForwardVector(), Input);
 	}
 }
 
-void ACustomPawn::Jump()
+void ACustomCharacter::RightLeftCallback(float Input)
+{
+	if (PlayerControllerInstance != nullptr)
+	{
+		AddMovementInput(CameraComponentInstance->GetRightVector(), Input);
+	}
+}
+
+void ACustomCharacter::Jump()
 {
 	if (PlayerControllerInstance != nullptr)
 	{
@@ -85,8 +118,9 @@ void ACustomPawn::Jump()
 
 #pragma endregion
 
+
 #pragma region Test Derived from Pawn
-void ACustomPawn::InitializePlayerPawn()
+void ACustomCharacter::InitializePlayerPawn()
 {
 	//this->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
