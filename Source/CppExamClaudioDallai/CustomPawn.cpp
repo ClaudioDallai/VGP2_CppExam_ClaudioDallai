@@ -8,7 +8,6 @@ ACustomPawn::ACustomPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//InitializePlayerPawn();
 	InitializePlayerCharacter();
 }
 
@@ -32,10 +31,61 @@ void ACustomPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis(FName("Forward"), this, &ACustomPawn::ForwardBackwardCallback);
 	PlayerInputComponent->BindAxis(FName("Right"), this, &ACustomPawn::RightLeftCallback);
+	//PlayerInputComponent->BindAxis(FName("Look"), this, &ACustomPawn::Look)
 	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACustomPawn::Jump);
 
 }
 
+void ACustomPawn::InitializePlayerCharacter()
+{
+	// Add Skeletal Mesh
+	USkeletalMeshComponent* SkeletalMesh = GetMesh();
+	SkeletalMesh->SetSkeletalMesh(LoadObject<USkeletalMesh>(nullptr, *SkeletalMeshPath));
+	SkeletalMesh->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
+	// Add Animation Class
+	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimObj(*AnimInstancePath);
+	SkeletalMesh->SetAnimInstanceClass(AnimObj.Object->GeneratedClass);
+}
+
+
+#pragma region Inputs
+void ACustomPawn::Look(FVector2D InputAxis)
+{
+	if (PlayerControllerInstance != nullptr)
+	{
+		AddControllerYawInput(InputAxis.X);
+		AddControllerPitchInput(InputAxis.Y);
+	}
+}
+
+void ACustomPawn::ForwardBackwardCallback(float Input)
+{
+	if (PlayerControllerInstance != nullptr)
+	{
+		AddMovementInput(GetActorForwardVector(), Input);
+	}
+}
+
+void ACustomPawn::RightLeftCallback(float Input)
+{
+	if (PlayerControllerInstance != nullptr)
+	{
+		AddMovementInput(GetActorRightVector(), Input);
+	}
+}
+
+void ACustomPawn::Jump()
+{
+	if (PlayerControllerInstance != nullptr)
+	{
+		ACharacter::Jump();
+	}
+}
+
+#pragma endregion
+
+#pragma region Test Derived from Pawn
 void ACustomPawn::InitializePlayerPawn()
 {
 	//this->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -81,48 +131,6 @@ void ACustomPawn::InitializePlayerPawn()
 	//	}
 	//}
 }
-
-void ACustomPawn::InitializePlayerCharacter()
-{
-	SkeletalMesh
-}
-
-
-#pragma region Inputs
-void ACustomPawn::Look(FVector2D InputAxis)
-{
-	if (Controller != nullptr)
-	{
-		AddControllerYawInput(InputAxis.X);
-		AddControllerPitchInput(InputAxis.Y);
-	}
-}
-
-void ACustomPawn::ForwardBackwardCallback(float Input)
-{
-	//this->MovementComponentInstance->MoveForward(Input);
-	if (Controller != nullptr)
-	{
-		AddMovementInput(GetActorForwardVector(), Input);
-	}
-}
-
-void ACustomPawn::RightLeftCallback(float Input)
-{
-	//this->MovementComponentInstance->MoveRight(Input);
-	if (PlayerControllerInstance != nullptr)
-	{
-		AddMovementInput(GetActorRightVector(), Input);
-	}
-}
-
-void ACustomPawn::Jump()
-{
-	//this->MovementComponentInstance->CustomJump();
-	if (PlayerControllerInstance != nullptr)
-	{
-		ACharacter::Jump();
-	}
-}
-
 #pragma endregion
+
+

@@ -31,6 +31,8 @@ private:
 	const FString AnimInstancePath = "/Game/Custom/ABP_CustomManny.ABP_CustomManny";
 
 public:
+
+	#pragma region VarNotUsed
 	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -42,6 +44,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* SpringArmComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)*/
+	#pragma endregion
+	
 	APlayerController* PlayerControllerInstance;
 
 public:	
@@ -57,6 +61,6 @@ public:
 	void Jump();
 
 private:
-	void InitializePlayerPawn();
+	void InitializePlayerPawn(); // Not Used. Still here to remember what I tryed
 	void InitializePlayerCharacter();
 };
