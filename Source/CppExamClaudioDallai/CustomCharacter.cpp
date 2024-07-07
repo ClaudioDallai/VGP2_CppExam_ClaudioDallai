@@ -69,7 +69,7 @@ void ACustomCharacter::InitializePlayerCharacter()
 	CharacterMovementComponentInstance->bOrientRotationToMovement = true;
 
 	CharacterMovementComponentInstance->RotationRate = FRotator(0.0f, 550.0f, 0.0f);
-	CharacterMovementComponentInstance->JumpZVelocity = 700.0f;
+	CharacterMovementComponentInstance->JumpZVelocity = 500.0f;
 	CharacterMovementComponentInstance->AirControl = 0.45f;
 	CharacterMovementComponentInstance->MaxWalkSpeed = 450.0f;
 }
@@ -87,7 +87,6 @@ void ACustomCharacter::LookYCallback(float MouseInput)
 {
 	if (PlayerControllerInstance != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%f"), MouseInput);
 		AddControllerPitchInput(MouseInput);
 	}
 }
@@ -96,7 +95,14 @@ void ACustomCharacter::ForwardBackwardCallback(float Input)
 {
 	if (PlayerControllerInstance != nullptr)
 	{
-		AddMovementInput(CameraComponentInstance->GetForwardVector(), Input);
+		const FRotator Rotation = PlayerControllerInstance->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// I have found a solution looking online for a good way to do this. 
+		// I've understand why it uses a Matrix to isolate a specific axis and I've studied it BUT that is not totally my idea (as I said found solution online).
+		// As the case below, initially I did Unrotate the cached Camera on all Axis except Right or Forward, but that was way to bad-looking in my opinion.
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(ForwardDirection, Input);
 	}
 }
 
@@ -104,7 +110,13 @@ void ACustomCharacter::RightLeftCallback(float Input)
 {
 	if (PlayerControllerInstance != nullptr)
 	{
-		AddMovementInput(CameraComponentInstance->GetRightVector(), Input);
+		const FRotator Rotation = PlayerControllerInstance->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// I have found a solution looking online for a good way to do this. 
+		// I've understand why it uses a Matrix to isolate a specific axis and I've studied it BUT that is not totally my idea (as I said found solution online).
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(RightDirection, Input);
 	}
 }
 
