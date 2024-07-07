@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/MovementComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Character.h"
 #include "CustomMovementComponent.generated.h"
 
 /**
  * 
  */
 UCLASS(BlueprintType, Blueprintable, meta = (BlueprintSpawnableComponent))
-class CPPEXAMCLAUDIODALLAI_API UCustomMovementComponent : public UPawnMovementComponent
+class CPPEXAMCLAUDIODALLAI_API UCustomMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
 	

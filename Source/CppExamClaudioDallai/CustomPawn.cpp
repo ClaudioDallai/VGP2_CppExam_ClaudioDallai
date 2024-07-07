@@ -8,7 +8,8 @@ ACustomPawn::ACustomPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	InitializePlayerPawn();
+	//InitializePlayerPawn();
+	InitializePlayerCharacter();
 }
 
 // Called when the game starts or when spawned
@@ -37,48 +38,53 @@ void ACustomPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void ACustomPawn::InitializePlayerPawn()
 {
-	this->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	//this->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	// Setup Capsule
-	this -> CapsuleComponentInstance = CreateAbstractDefaultSubobject<UCapsuleComponent>(TEXT("PlayerCapsule"));
-	if (CapsuleComponentInstance)
-	{
-		CapsuleComponentInstance->SetCollisionProfileName(TEXT("Pawn"));
-		CapsuleComponentInstance->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	}
+	//// Setup Capsule
+	//this -> CapsuleComponentInstance = CreateAbstractDefaultSubobject<UCapsuleComponent>(TEXT("PlayerCapsule"));
+	//if (CapsuleComponentInstance)
+	//{
+	//	CapsuleComponentInstance->SetCollisionProfileName(TEXT("Pawn"));
+	//	CapsuleComponentInstance->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//}
 
-	this->MovementComponentInstance = CreateDefaultSubobject<UCustomMovementComponent>(TEXT("PlayerMovementComponent"));
-	this->SkeletalMeshComponentInstance = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerSkeletalMesh"));
+	//this->MovementComponentInstance = CreateDefaultSubobject<UCustomMovementComponent>(TEXT("PlayerMovementComponent"));
+	//this->SkeletalMeshComponentInstance = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerSkeletalMesh"));
 
-	if (SkeletalMeshComponentInstance) 
-	{
-		// Add Skeletal Mesh
-		USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, *SkeletalMeshPath);
-		if (SkeletalMesh)
-		{
-			this->SkeletalMeshComponentInstance->SetSkeletalMesh(SkeletalMesh);
+	//if (SkeletalMeshComponentInstance) 
+	//{
+	//	// Add Skeletal Mesh
+	//	USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, *SkeletalMeshPath);
+	//	if (SkeletalMesh)
+	//	{
+	//		this->SkeletalMeshComponentInstance->SetSkeletalMesh(SkeletalMesh);
 
-			// Add Animation Class
-			const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimObj(*AnimInstancePath);
-			this->SkeletalMeshComponentInstance->SetAnimInstanceClass(AnimObj.Object->GeneratedClass);
-		}
+	//		// Add Animation Class
+	//		const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimObj(*AnimInstancePath);
+	//		this->SkeletalMeshComponentInstance->SetAnimInstanceClass(AnimObj.Object->GeneratedClass);
+	//	}
 
-		// Skeletal Mesh Collisions
-		SkeletalMeshComponentInstance->SetCollisionProfileName(TEXT("CharacterMesh"));
-		SkeletalMeshComponentInstance->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//	// Skeletal Mesh Collisions
+	//	SkeletalMeshComponentInstance->SetCollisionProfileName(TEXT("CharacterMesh"));
+	//	SkeletalMeshComponentInstance->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-		// Camera
-		this->SpringArmComponentInstance = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-		this->CameraComponentInstance = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
-		this->CameraComponentInstance->SetupAttachment(SpringArmComponentInstance);
+	//	// Camera
+	//	this->SpringArmComponentInstance = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	//	this->CameraComponentInstance = CreateAbstractDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
+	//	this->CameraComponentInstance->SetupAttachment(SpringArmComponentInstance);
 
-		// Create Hierarchy
-		if (CapsuleComponentInstance) 
-		{
-			this->SkeletalMeshComponentInstance->SetupAttachment(CapsuleComponentInstance);
-			this->SpringArmComponentInstance->SetupAttachment(CapsuleComponentInstance);
-		}
-	}
+	//	// Create Hierarchy
+	//	if (CapsuleComponentInstance) 
+	//	{
+	//		this->SkeletalMeshComponentInstance->SetupAttachment(CapsuleComponentInstance);
+	//		this->SpringArmComponentInstance->SetupAttachment(CapsuleComponentInstance);
+	//	}
+	//}
+}
+
+void ACustomPawn::InitializePlayerCharacter()
+{
+	SkeletalMesh
 }
 
 
@@ -94,17 +100,29 @@ void ACustomPawn::Look(FVector2D InputAxis)
 
 void ACustomPawn::ForwardBackwardCallback(float Input)
 {
-	this->MovementComponentInstance->MoveForward(Input);
+	//this->MovementComponentInstance->MoveForward(Input);
+	if (Controller != nullptr)
+	{
+		AddMovementInput(GetActorForwardVector(), Input);
+	}
 }
 
 void ACustomPawn::RightLeftCallback(float Input)
 {
-	this->MovementComponentInstance->MoveRight(Input);
+	//this->MovementComponentInstance->MoveRight(Input);
+	if (PlayerControllerInstance != nullptr)
+	{
+		AddMovementInput(GetActorRightVector(), Input);
+	}
 }
 
 void ACustomPawn::Jump()
 {
-	this->MovementComponentInstance->CustomJump();
+	//this->MovementComponentInstance->CustomJump();
+	if (PlayerControllerInstance != nullptr)
+	{
+		ACharacter::Jump();
+	}
 }
 
 #pragma endregion

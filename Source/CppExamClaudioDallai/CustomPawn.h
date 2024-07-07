@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "CustomMovementComponent.h"
 #include "Camera/CameraComponent.h"
@@ -14,7 +14,7 @@
 #include "CustomPawn.generated.h"
 
 UCLASS()
-class CPPEXAMCLAUDIODALLAI_API ACustomPawn : public APawn
+class CPPEXAMCLAUDIODALLAI_API ACustomPawn : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -31,7 +31,7 @@ private:
 	const FString AnimInstancePath = "/Game/Custom/ABP_CustomManny.ABP_CustomManny";
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* SkeletalMeshComponentInstance;
@@ -41,10 +41,8 @@ public:
 	UCameraComponent* CameraComponentInstance;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USpringArmComponent* SpringArmComponentInstance;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)*/
 	APlayerController* PlayerControllerInstance;
-	
-
 
 public:	
 	// Called every frame
@@ -60,4 +58,5 @@ public:
 
 private:
 	void InitializePlayerPawn();
+	void InitializePlayerCharacter();
 };

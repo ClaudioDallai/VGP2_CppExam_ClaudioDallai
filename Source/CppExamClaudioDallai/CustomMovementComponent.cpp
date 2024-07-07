@@ -93,9 +93,9 @@ void UCustomMovementComponent::MoveRight(float Input)
 
 void UCustomMovementComponent::CustomJump()
 {
-	APawn* Owner = Cast<APawn>(GetOwner());
+	ACharacter* Owner = Cast<ACharacter>(GetOwner());
 	if (Owner)
 	{
-		Owner->AddMovementInput(FVector::UpVector, 10000.0f, true);
+		Owner->Jump();
 	}
 }
