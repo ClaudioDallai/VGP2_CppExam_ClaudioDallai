@@ -100,7 +100,7 @@ void ACustomCharacter::ForwardBackwardCallback(float Input)
 
 		// I have found a solution looking online for a good way to do this. 
 		// I've understand why it uses a Matrix to isolate a specific axis and I've studied it BUT that is not totally my idea (as I said found solution online).
-		// As the case below, initially I did Unrotate the cached Camera on all Axis except Right or Forward, but that was way to bad-looking in my opinion.
+		// As the case below, initially I did Unrotate the cached Camera on all Axis except Right or Forward, but that was way too bad-looking in my opinion.
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(ForwardDirection, Input);
 	}

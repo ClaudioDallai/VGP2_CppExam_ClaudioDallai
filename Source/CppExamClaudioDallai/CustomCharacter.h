@@ -33,7 +33,7 @@ private:
 
 public:
 
-	#pragma region VarNotUsed
+	#pragma region VarNotUsedAnymore
 	/*
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCapsuleComponent* CapsuleComponentInstance;
