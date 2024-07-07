@@ -69,7 +69,7 @@ void ACustomCharacter::InitializePlayerCharacter()
 	CharacterMovementComponentInstance->bOrientRotationToMovement = true;
 
 	CharacterMovementComponentInstance->RotationRate = FRotator(0.0f, 550.0f, 0.0f);
-	CharacterMovementComponentInstance->JumpZVelocity = 500.0f;
+	CharacterMovementComponentInstance->JumpZVelocity = 600.0f;
 	CharacterMovementComponentInstance->AirControl = 0.45f;
 	CharacterMovementComponentInstance->MaxWalkSpeed = 450.0f;
 }
