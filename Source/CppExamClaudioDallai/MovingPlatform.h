@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/TimelineComponent.h"
 #include "MovingPlatform.generated.h"
 
 UCLASS()
@@ -17,6 +18,9 @@ public:
 
 private:
 	const FString MeshPath = "/Game/StarterContent/Shapes/Shape_Plane.Shape_Plane";
+	int32 Index;
+	FTransform CurrentTransformTarget;
+	FTransform StartTransformTarget;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -24,6 +28,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FTransform> TransformArray;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UTimelineComponent* CustomTimelineInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCurveFloat* TimeLineFloatCurve;
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,6 +43,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
 	void MoveToNextTarget();
-
+	UFUNCTION()
+	void HandleFinish();
+	UFUNCTION()
+	void HandleProgress(float Alpha);
+	UFUNCTION()
+	void SetCurrentStartTransform();
 };
