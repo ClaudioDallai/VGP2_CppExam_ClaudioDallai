@@ -20,7 +20,7 @@ void ALoadGame::BeginPlay()
 
 	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
 	{
-		LoadGame(SlotName, 0);
+		LoadGameMethod(SlotName, 0);
 	}
 }
 
@@ -60,7 +60,7 @@ void ALoadGame::Tick(float DeltaTime)
 
 }
 
-bool ALoadGame::LoadGame(const FString Slot, const int32 PlayerIndex)
+bool ALoadGame::LoadGameMethod(const FString Slot, const int32 PlayerIndex)
 {
 	UCustomSaveGame* LoadGame = Cast<UCustomSaveGame>(UGameplayStatics::LoadGameFromSlot(Slot, PlayerIndex));
 	if (LoadGame)
@@ -93,7 +93,7 @@ void ALoadGame::OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor*
 	{
 		if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
 		{
-			LoadGame(SlotName, 0);
+			LoadGameMethod(SlotName, 0);
 		}
 		else
 		{

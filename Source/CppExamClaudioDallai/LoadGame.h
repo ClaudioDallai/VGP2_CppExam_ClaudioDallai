@@ -41,7 +41,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	bool LoadGame(const FString SlotName, const int32 PlayerIndex);
+	bool LoadGameMethod(const FString SlotName, const int32 PlayerIndex);
 
 	UFUNCTION()
 	void OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
