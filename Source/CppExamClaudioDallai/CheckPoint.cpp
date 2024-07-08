@@ -10,6 +10,11 @@ ACheckPoint::ACheckPoint()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BoxTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("SaveBoxTrigger"));
+
+    CheckpointText = FText::FromString("CHECKPOINT");
+    CheckpointTextRenderer = CreateDefaultSubobject<UTextRenderComponent>(TEXT("CheckPointText"));
+    CheckpointTextRenderer->SetupAttachment(BoxTrigger);
+    CheckpointTextRenderer->SetText(CheckpointText);
 }
 
 // Called when the game starts or when spawned

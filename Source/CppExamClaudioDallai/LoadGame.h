@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/PlayerStart.h"
 #include "Components/BoxComponent.h"
 #include "CustomSaveGame.h"
 #include <Kismet/GameplayStatics.h>
@@ -26,9 +27,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UBoxComponent* BoxTrigger;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	APlayerStart* PlayerStartReference;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void ResetPlayerToStart();
 
 public:	
 	// Called every frame

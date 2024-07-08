@@ -17,6 +17,40 @@ void ALoadGame::BeginPlay()
 {
 	Super::BeginPlay();
 	BoxTrigger->OnComponentBeginOverlap.AddDynamic(this, &ALoadGame::OnCollisionCallback);
+
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
+	{
+		LoadGame(SlotName, 0);
+	}
+}
+
+void ALoadGame::ResetPlayerToStart()
+{
+	UWorld* CurrentWorld = GetWorld();
+	if (!CurrentWorld)
+	{
+		return;
+	}
+
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(CurrentWorld, 0);
+	if (!PlayerPawn)
+	{
+		return;
+	}
+
+	if (PlayerStartReference)
+	{
+		PlayerPawn->SetActorLocation(PlayerStartReference->GetActorLocation());
+		PlayerPawn->SetActorRotation(PlayerStartReference->GetActorRotation());
+	}
+
+	AController* PlayerController = UGameplayStatics::GetPlayerController(CurrentWorld, 0);
+	if (!PlayerController)
+	{
+		return;
+	}
+
+	PlayerController->SetControlRotation(FRotator(0.0f, 0.0f, 0.0f));
 }
 
 // Called every frame
@@ -46,6 +80,7 @@ bool ALoadGame::LoadGame(const FString Slot, const int32 PlayerIndex)
 		// Load Datas
 		PlayerPawn->SetActorTransform(LoadGame->PlayerDataStruct.PlayerTransform);
 
+
 		return true;
 	}
 
@@ -56,7 +91,14 @@ void ALoadGame::OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor*
 {
 	if (OtherActor && OtherActor->ActorHasTag(PlayerTag))
 	{
-		LoadGame(SlotName, 0);
+		if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
+		{
+			LoadGame(SlotName, 0);
+		}
+		else
+		{
+			ResetPlayerToStart();
+		}
 	}
 }
 
