@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "CppExamClaudioDallaiGameMode.h"
-#include "CppExamClaudioDallaiCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ACppExamClaudioDallaiGameMode::ACppExamClaudioDallaiGameMode()
