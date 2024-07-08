@@ -7,16 +7,16 @@
 #include "Components/BoxComponent.h"
 #include "CustomSaveGame.h"
 #include <Kismet/GameplayStatics.h>
-#include "CheckPoint.generated.h"
+#include "LoadGame.generated.h"
 
 UCLASS()
-class CPPEXAMCLAUDIODALLAI_API ACheckPoint : public AActor
+class CPPEXAMCLAUDIODALLAI_API ALoadGame : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ACheckPoint();
+	ALoadGame();
 
 private:
 	const FString SlotName = "Slot1";
@@ -30,12 +30,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	bool SaveGame(const FString SlotName, const int32 PlayerIndex);
+	bool LoadGame(const FString SlotName, const int32 PlayerIndex);
+
 	UFUNCTION()
 	void OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, 
 							 UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
