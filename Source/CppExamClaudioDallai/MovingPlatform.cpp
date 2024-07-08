@@ -78,7 +78,7 @@ void AMovingPlatform::HandleFinish()
 
 void AMovingPlatform::HandleProgress(float Alpha)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%f"), Alpha);
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), Alpha);
 	if (CustomTimelineInstance->IsPlaying())
 	{
 		FTransform Transform;
