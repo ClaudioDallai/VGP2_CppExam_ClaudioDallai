@@ -9,6 +9,7 @@ ALoadGame::ALoadGame()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	PlayerStartReference = nullptr;
 	BoxTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("LoadBoxTrigger"));
 }
 
@@ -18,9 +19,14 @@ void ALoadGame::BeginPlay()
 	Super::BeginPlay();
 	BoxTrigger->OnComponentBeginOverlap.AddDynamic(this, &ALoadGame::OnCollisionCallback);
 
-	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0))
+	ACppExamClaudioDallaiGameMode* CurrentGamemode = Cast<ACppExamClaudioDallaiGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (CurrentGamemode)
 	{
-		LoadGameMethod(SlotName, 0);
+		if (UGameplayStatics::DoesSaveGameExist(SlotName, 0) && !CurrentGamemode->GetIsLoaded())
+		{
+			CurrentGamemode->SetIsLoaded(true);
+			LoadGameMethod(SlotName, 0);
+		}
 	}
 }
 

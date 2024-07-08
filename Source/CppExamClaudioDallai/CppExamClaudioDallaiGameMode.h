@@ -13,6 +13,15 @@ class ACppExamClaudioDallaiGameMode : public AGameModeBase
 
 public:
 	ACppExamClaudioDallaiGameMode();
+
+	UFUNCTION()
+	bool GetIsLoaded();
+
+	UFUNCTION()
+	void SetIsLoaded(bool bNewLoaded);
+
+private:
+	bool bIsLoaded;
 };
 
 

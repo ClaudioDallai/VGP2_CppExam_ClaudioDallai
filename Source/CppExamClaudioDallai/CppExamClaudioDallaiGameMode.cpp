@@ -11,4 +11,16 @@ ACppExamClaudioDallaiGameMode::ACppExamClaudioDallaiGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	bIsLoaded = false;
+}
+
+bool ACppExamClaudioDallaiGameMode::GetIsLoaded()
+{
+	return bIsLoaded;
+}
+
+void ACppExamClaudioDallaiGameMode::SetIsLoaded(bool bNewLoaded)
+{
+	bIsLoaded = bNewLoaded;
 }

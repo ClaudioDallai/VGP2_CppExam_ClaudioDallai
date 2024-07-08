@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "CustomSaveGame.h"
 #include <Kismet/GameplayStatics.h>
+#include "CppExamClaudioDallaiGameMode.h"
 #include "LoadGame.generated.h"
 
 UCLASS()
