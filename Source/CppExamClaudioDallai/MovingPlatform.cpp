@@ -9,7 +9,7 @@ AMovingPlatform::AMovingPlatform()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Index = 0;
-	SetCurrentStartTransform();
+	DelayTime = 1.0f;
 
 	// Set Platform Mesh
 	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshPlatform"));
@@ -27,6 +27,8 @@ void AMovingPlatform::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetCurrentStartTransform();
+
 	// TimeLine
 	FOnTimelineFloat TimelineCallback;
 	FOnTimelineEvent TimelineFinishedCallback;
@@ -42,15 +44,25 @@ void AMovingPlatform::BeginPlay()
 
 	if (!TransformArray.IsEmpty())
 	{
+		MoveToNextTarget();
 		CustomTimelineInstance->PlayFromStart();
 	}
 }
+
 
 // Called every frame
 void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AMovingPlatform::ManageNextTarget()
+{
+	Index = (Index + 1) % TransformArray.Num();
+	MoveToNextTarget();
+	SetCurrentStartTransform();
+	CustomTimelineInstance->PlayFromStart();
 }
 
 void AMovingPlatform::MoveToNextTarget()
@@ -60,10 +72,8 @@ void AMovingPlatform::MoveToNextTarget()
 
 void AMovingPlatform::HandleFinish()
 {
-	Index = (Index + 1) % TransformArray.Num();
-	MoveToNextTarget();
-	SetCurrentStartTransform();
-	CustomTimelineInstance->PlayFromStart();
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AMovingPlatform::ManageNextTarget, DelayTime, false);
 }
 
 void AMovingPlatform::HandleProgress(float Alpha)

@@ -35,9 +35,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UCurveFloat* TimeLineFloatCurve;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DelayTime;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void ManageNextTarget();
 
 public:	
 	// Called every frame
