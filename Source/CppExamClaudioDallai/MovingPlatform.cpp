@@ -8,6 +8,7 @@ AMovingPlatform::AMovingPlatform()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	TimeLineFloatCurve = nullptr;
 	Index = 0;
 	DelayTime = 1.0f;
 
@@ -81,9 +82,15 @@ void AMovingPlatform::HandleProgress(float Alpha)
 	//UE_LOG(LogTemp, Warning, TEXT("%f"), Alpha);
 	if (CustomTimelineInstance->IsPlaying())
 	{
+		// Manage Platform Location and Scale in time
 		FTransform Transform;
 		Transform.LerpTranslationScale3D(StartTransformTarget, CurrentTransformTarget, ScalarRegister(Alpha));
 		this->SetActorTransform(Transform);
+
+		// Manage Platform Rotation in time
+		FRotator Rotation;
+		Rotation = FRotator(FQuat::Slerp(StartTransformTarget.GetRotation(), CurrentTransformTarget.GetRotation(), Alpha));
+		this->SetActorRotation(Rotation);
 	}
 }
 
