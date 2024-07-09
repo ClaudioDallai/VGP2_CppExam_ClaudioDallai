@@ -21,16 +21,28 @@ public:
 
 private:
 	const FString MeshPath = "/Game/StarterContent/Props/SM_Statue.SM_Statue";
+	FTimerHandle PowerUpTimerHandle;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float NewJumpPower;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DefaultJumpPower;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PowerUpDuration;
 
 protected:
 	virtual void BeginPlay() override;
 
 	// Override Interaction
 	void InteractionExecuted(AActor* Sender) override;
+	void PowerUpEnabled(AActor* Sender) override;
+	void PowerUpDisabled(AActor* Sender) override;
+
+	void ChangeJumpPower(AActor* Sender, float SenderJumpPower);
+	void OnTimerEnd();
 
 public:
 	// Called every frame

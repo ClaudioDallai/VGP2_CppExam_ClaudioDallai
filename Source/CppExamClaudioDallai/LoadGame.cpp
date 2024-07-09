@@ -85,6 +85,15 @@ bool ALoadGame::LoadGameMethod(const FString Slot, const int32 PlayerIndex)
 
 		// Load Datas
 		PlayerPawn->SetActorTransform(LoadGame->PlayerDataStruct.PlayerTransform);
+		ACharacter* Character = Cast<ACharacter>(PlayerPawn);
+		if (Character)
+		{
+			UCharacterMovementComponent* MovementComponent = Character->GetCharacterMovement();
+			if (MovementComponent)
+			{
+				MovementComponent->JumpZVelocity = LoadGame->PlayerDataStruct.PlayerJumpZForce;
+			}
+		}
 
 
 		return true;

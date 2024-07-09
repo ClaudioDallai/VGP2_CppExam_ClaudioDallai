@@ -53,6 +53,19 @@ bool ACheckPoint::SaveGame(const FString Slot, const int32 PlayerIndex)
 
             // Save Datas
             CheckpointSaveGame->PlayerDataStruct.PlayerTransform = PlayerPawn->GetTransform();
+            ACharacter* Character = Cast<ACharacter>(PlayerPawn);
+            if (Character)
+            {
+                UCharacterMovementComponent* MovementComponent = Character->GetCharacterMovement();
+                if (MovementComponent)
+                {
+                    CheckpointSaveGame->PlayerDataStruct.PlayerJumpZForce = MovementComponent->JumpZVelocity;
+                }
+                else
+                {
+                    CheckpointSaveGame->PlayerDataStruct.PlayerJumpZForce = 600.0f;
+                }
+            }
 
             UGameplayStatics::SaveGameToSlot(CheckpointSaveGame, Slot, PlayerIndex);
             return true;

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "CustomSaveGame.h"

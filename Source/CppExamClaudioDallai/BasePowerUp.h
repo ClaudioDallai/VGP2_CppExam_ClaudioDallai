@@ -16,6 +16,9 @@ public:
 	// Sets default values for this actor's properties
 	ABasePowerUp();
 
+protected:
+	AActor* LastActorInteractedWith;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* MeshUsedInstance;
@@ -25,6 +28,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void InteractionExecuted(AActor* Sender);
+	virtual void PowerUpEnabled(AActor* Sender);
+	virtual void PowerUpDisabled(AActor* Sender);
+
 
 public:	
 	// Called every frame

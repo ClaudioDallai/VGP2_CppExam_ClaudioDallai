@@ -12,6 +12,9 @@ struct FPlayerSaveData {
 
 	UPROPERTY(BlueprintReadWrite)
 	FTransform PlayerTransform;
+
+	UPROPERTY(BlueprintReadWrite)
+	float PlayerJumpZForce;
 };
 
 

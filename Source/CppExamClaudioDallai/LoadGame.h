@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/PlayerStart.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
 #include "CustomSaveGame.h"
 #include <Kismet/GameplayStatics.h>
