@@ -6,6 +6,7 @@
 #include "BasePowerUp.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "CppExamClaudioDallaiGameMode.h"
 #include "JumpPowerUp.generated.h"
 
 /**
@@ -40,6 +41,7 @@ protected:
 	void InteractionExecuted(AActor* Sender) override;
 	void PowerUpEnabled(AActor* Sender) override;
 	void PowerUpDisabled(AActor* Sender) override;
+	void PowerUpInterrupted() override;
 
 	void ChangeJumpPower(AActor* Sender, float SenderJumpPower);
 	void OnTimerEnd();

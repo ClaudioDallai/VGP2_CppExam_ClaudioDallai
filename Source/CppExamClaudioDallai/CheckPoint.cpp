@@ -9,6 +9,7 @@ ACheckPoint::ACheckPoint()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    bAlreadyUsed = false;
 	BoxTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("SaveBoxTrigger"));
 
     CheckpointText = FText::FromString("CHECKPOINT");
@@ -68,6 +69,7 @@ bool ACheckPoint::SaveGame(const FString Slot, const int32 PlayerIndex)
             }
 
             UGameplayStatics::SaveGameToSlot(CheckpointSaveGame, Slot, PlayerIndex);
+            bAlreadyUsed = true;
             return true;
         }
     }
@@ -77,7 +79,7 @@ bool ACheckPoint::SaveGame(const FString Slot, const int32 PlayerIndex)
 
 void ACheckPoint::OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    if (OtherActor && OtherActor->ActorHasTag(PlayerTag)) 
+    if (OtherActor && OtherActor->ActorHasTag(PlayerTag) && !bAlreadyUsed) 
     {
         SaveGame(SlotName, 0);
     }

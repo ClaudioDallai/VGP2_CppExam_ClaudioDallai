@@ -44,6 +44,11 @@ void ABasePowerUp::PowerUpDisabled(AActor* Sender)
 	// Base Class Method
 }
 
+void ABasePowerUp::PowerUpInterrupted()
+{
+	// Base Class Method
+}
+
 #pragma endregion
 
 bool ABasePowerUp::Interaction(AActor* Sender)

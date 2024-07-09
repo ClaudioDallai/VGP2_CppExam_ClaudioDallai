@@ -38,6 +38,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void ResetPlayerToStart();
+	void NotifyPlayerFellOff();
 
 public:	
 	// Called every frame

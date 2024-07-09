@@ -14,6 +14,7 @@
 #include "InteractionInterface.h"
 #include "CustomCharacter.generated.h"
 
+
 UCLASS()
 class CPPEXAMCLAUDIODALLAI_API ACustomCharacter : public ACharacter
 {

@@ -6,6 +6,8 @@
 #include "GameFramework/GameModeBase.h"
 #include "CppExamClaudioDallaiGameMode.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerFellOff);
+
 UCLASS(minimalapi)
 class ACppExamClaudioDallaiGameMode : public AGameModeBase
 {
@@ -20,8 +22,15 @@ public:
 	UFUNCTION()
 	void SetIsLoaded(bool bNewLoaded);
 
+	UFUNCTION()
+	void PlayerFellCallback();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FPlayerFellOff OnPlayerFellOff;
+
 private:
 	bool bIsLoaded;
+
 };
 
 

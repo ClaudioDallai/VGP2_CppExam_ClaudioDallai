@@ -24,3 +24,8 @@ void ACppExamClaudioDallaiGameMode::SetIsLoaded(bool bNewLoaded)
 {
 	bIsLoaded = bNewLoaded;
 }
+
+void ACppExamClaudioDallaiGameMode::PlayerFellCallback()
+{
+	OnPlayerFellOff.Broadcast();
+}

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InteractionInterface.h"
+#include <Kismet/GameplayStatics.h>
 #include "BasePowerUp.generated.h"
 
 UCLASS()
@@ -27,10 +28,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	virtual void InteractionExecuted(AActor* Sender);
+	UFUNCTION()
 	virtual void PowerUpEnabled(AActor* Sender);
+	UFUNCTION()
 	virtual void PowerUpDisabled(AActor* Sender);
-
+	UFUNCTION()
+	virtual void PowerUpInterrupted();
 
 public:	
 	// Called every frame

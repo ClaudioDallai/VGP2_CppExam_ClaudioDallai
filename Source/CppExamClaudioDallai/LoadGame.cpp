@@ -95,7 +95,6 @@ bool ALoadGame::LoadGameMethod(const FString Slot, const int32 PlayerIndex)
 			}
 		}
 
-
 		return true;
 	}
 
@@ -114,6 +113,17 @@ void ALoadGame::OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor*
 		{
 			ResetPlayerToStart();
 		}
+
+		NotifyPlayerFellOff();
+	}
+}
+
+void ALoadGame::NotifyPlayerFellOff()
+{
+	ACppExamClaudioDallaiGameMode* CurrentGameMode = Cast<ACppExamClaudioDallaiGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (CurrentGameMode)
+	{
+		CurrentGameMode->PlayerFellCallback();
 	}
 }
 

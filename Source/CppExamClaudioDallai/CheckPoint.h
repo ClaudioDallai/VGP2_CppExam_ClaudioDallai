@@ -35,6 +35,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText CheckpointText;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bAlreadyUsed;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

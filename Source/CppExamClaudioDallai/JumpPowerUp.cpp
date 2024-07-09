@@ -21,12 +21,20 @@ AJumpPowerUp::AJumpPowerUp()
 void AJumpPowerUp::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ACppExamClaudioDallaiGameMode* CurrentGameMode = Cast<ACppExamClaudioDallaiGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (CurrentGameMode)
+	{
+		CurrentGameMode->OnPlayerFellOff.AddDynamic(this, &AJumpPowerUp::PowerUpInterrupted);
+	}
 }
 
 void AJumpPowerUp::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
+#pragma region Base Methods Override
 
 void AJumpPowerUp::InteractionExecuted(AActor* Sender)
 {
@@ -54,6 +62,21 @@ void AJumpPowerUp::PowerUpDisabled(AActor* Sender)
 	}
 }
 
+void AJumpPowerUp::PowerUpInterrupted()
+{
+	//UE_LOG(LogTemp, Warning, TEXT("DYNAMIC MULTICAST DELEGATE CALLED"));
+	if (PowerUpTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(PowerUpTimerHandle);
+		if (LastActorInteractedWith)
+		{
+			PowerUpDisabled(LastActorInteractedWith);
+		}
+	}
+}
+
+#pragma endregion
+
 void AJumpPowerUp::ChangeJumpPower(AActor* Sender, float SenderJumpPower)
 {
 	ACharacter* SenderCharacter = Cast<ACharacter>(Sender);
@@ -72,6 +95,7 @@ void AJumpPowerUp::OnTimerEnd()
 	PowerUpDisabled(LastActorInteractedWith);
 }
 
+// Interface
 bool AJumpPowerUp::Interaction(AActor* Sender)
 {
 	if (Sender)
