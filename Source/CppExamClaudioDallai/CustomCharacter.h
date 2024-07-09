@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <InputAction.h>
 #include <Kismet/GameplayStatics.h>
+#include "InteractionInterface.h"
 #include "CustomCharacter.generated.h"
 
 UCLASS()
@@ -69,6 +70,8 @@ public:
 	void ForwardBackwardCallback(float Input);
 	void RightLeftCallback(float Input);
 	void Jump();
+	void PlayerInteraction();
+	void InteractionLineTrace(FVector StartPoint, FVector EndPoint);
 
 private:
 	void InitializePlayerPawn(); // Not Used. Still here to remember what I tryed

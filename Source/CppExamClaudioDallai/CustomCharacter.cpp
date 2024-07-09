@@ -35,6 +35,7 @@ void ACustomCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(FName("LookY"), this, &ACustomCharacter::LookYCallback);
 	PlayerInputComponent->BindAxis(FName("LookX"), this, &ACustomCharacter::LookXCallback);
 	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACustomCharacter::Jump);
+	PlayerInputComponent->BindAction(FName("Interaction"), IE_Pressed, this, &ACustomCharacter::PlayerInteraction);
 }
 
 void ACustomCharacter::InitializePlayerCharacter()
@@ -72,6 +73,29 @@ void ACustomCharacter::InitializePlayerCharacter()
 	CharacterMovementComponentInstance->JumpZVelocity = 600.0f;
 	CharacterMovementComponentInstance->AirControl = 0.45f;
 	CharacterMovementComponentInstance->MaxWalkSpeed = 450.0f;
+}
+
+void ACustomCharacter::InteractionLineTrace(FVector StartPoint, FVector EndPoint)
+{
+	FHitResult Result;
+
+	UWorld* World = this->GetWorld();
+	if (!World)
+	{
+		return;
+	}
+
+	DrawDebugLine(World, StartPoint, EndPoint, FColor::Green, false, 1.5f);
+	bool bHit = World->LineTraceSingleByChannel(Result, StartPoint, EndPoint, ECollisionChannel::ECC_Visibility);
+
+	AActor* Other = Result.GetActor();
+	if (bHit && Result.Component.IsValid() && Other)
+	{
+		if (Other->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
+		{
+			Cast<IInteractionInterface>(Other)->Interaction(this);
+		}
+	}
 }
 
 
@@ -128,9 +152,16 @@ void ACustomCharacter::Jump()
 	}
 }
 
+void ACustomCharacter::PlayerInteraction()
+{
+	InteractionLineTrace(this->GetActorLocation(),
+						 this->GetActorForwardVector() * 500 + this->GetActorLocation());
+}
+
 #pragma endregion
 
 
+// Not Used Anymore. It was used before when I tryed implementing a Custom Pawn not Character
 #pragma region Test Derived from Pawn
 void ACustomCharacter::InitializePlayerPawn()
 {
@@ -178,5 +209,3 @@ void ACustomCharacter::InitializePlayerPawn()
 	//}
 }
 #pragma endregion
-
-
