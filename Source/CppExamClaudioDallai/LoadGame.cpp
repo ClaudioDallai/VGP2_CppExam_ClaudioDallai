@@ -118,6 +118,8 @@ void ALoadGame::OnCollisionCallback(UPrimitiveComponent* OverlappedComp, AActor*
 	}
 }
 
+// Execute GameMode Method (wrapper of a DynamicDelegate.broadcast()). Same principle could be applied to another Engine Class like PlayerState. 
+// But i tought that the notify if the Player fell of the map could be related to the map itself (so GameMode).
 void ALoadGame::NotifyPlayerFellOff()
 {
 	ACppExamClaudioDallaiGameMode* CurrentGameMode = Cast<ACppExamClaudioDallaiGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
