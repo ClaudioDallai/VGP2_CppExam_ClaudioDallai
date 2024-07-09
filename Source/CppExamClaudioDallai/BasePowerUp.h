@@ -23,7 +23,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void InteractionExecuted();
+
+	virtual void InteractionExecuted(AActor* Sender);
 
 public:	
 	// Called every frame
@@ -31,6 +32,6 @@ public:
 
 
 	// Interface
-	bool Interaction(AActor* Sender) override;
+	virtual bool Interaction(AActor* Sender) override;
 
 };

@@ -26,7 +26,7 @@ void ABasePowerUp::Tick(float DeltaTime)
 
 }
 
-void ABasePowerUp::InteractionExecuted()
+void ABasePowerUp::InteractionExecuted(AActor* Sender)
 {
 	// Base Class Method
 }

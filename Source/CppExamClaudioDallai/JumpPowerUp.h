@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BasePowerUp.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "JumpPowerUp.generated.h"
 
 /**
@@ -20,11 +22,15 @@ public:
 private:
 	const FString MeshPath = "/Game/StarterContent/Props/SM_Statue.SM_Statue";
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float NewJumpPower;
+
 protected:
 	virtual void BeginPlay() override;
 
 	// Override Interaction
-	void InteractionExecuted() override;
+	void InteractionExecuted(AActor* Sender) override;
 
 public:
 	// Called every frame

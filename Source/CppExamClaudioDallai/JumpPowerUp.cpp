@@ -6,6 +6,7 @@
 AJumpPowerUp::AJumpPowerUp()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	NewJumpPower = 1200.0f;
 
 	MeshUsedInstance = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UsedMesh"));
 	MeshUsedInstance->SetStaticMesh(LoadObject<UStaticMesh>(nullptr, *MeshPath));
@@ -24,14 +25,29 @@ void AJumpPowerUp::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AJumpPowerUp::InteractionExecuted()
+void AJumpPowerUp::InteractionExecuted(AActor* Sender)
 {
 	// Base Class Method Implementation Override
-	UE_LOG(LogTemp, Warning, TEXT("INTERFACE CALLED"));
+	//UE_LOG(LogTemp, Warning, TEXT("INTERFACE CALLED"));
+
+	ACharacter* SenderCharacter = Cast<ACharacter>(Sender);
+	if (SenderCharacter)
+	{
+		UCharacterMovementComponent* MovementComponent =  SenderCharacter->GetCharacterMovement();
+		if (MovementComponent)
+		{
+			MovementComponent->JumpZVelocity = NewJumpPower;
+		}
+	}
 }
 
 bool AJumpPowerUp::Interaction(AActor* Sender)
 {
-	InteractionExecuted();
-	return true;
+	if (Sender)
+	{
+		InteractionExecuted(Sender);
+		return true;
+	}
+
+	return false;
 }
